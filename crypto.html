@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaucetHunter - Best Crypto Faucets 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        /* --- CRYPTO NEON THEME --- */
+        :root {
+            --bg-dark: #0a0a0a;
+            --glass-bg: rgba(20, 20, 20, 0.6);
+            --glass-border: rgba(255, 215, 0, 0.15); /* Kulta reunus */
+            
+            /* CRYPTO COLORS */
+            --neon-gold: #ffd700;
+            --neon-orange: #ff9900; /* Bitcoin Orange */
+            --neon-green: #00ff9d;  /* Money Green */
+            --neon-blue: #00f3ff;   /* Tech Blue */
+            
+            --text-main: #ffffff;
+            --text-muted: #aaa;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0; padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- AMBIENT BACKGROUND (GOLDEN GLOW) --- */
+        .ambient-light {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: #050505;
+        }
+        .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.3; animation: float 12s infinite alternate; }
+        .blob-1 { width: 400px; height: 400px; background: var(--neon-orange); top: -100px; left: -100px; }
+        .blob-2 { width: 350px; height: 350px; background: var(--neon-gold); bottom: 10%; right: -50px; animation-delay: -3s; }
+        .blob-3 { width: 300px; height: 300px; background: var(--neon-blue); top: 40%; left: 40%; opacity: 0.15; }
+        
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(20px, 40px) scale(1.1); } }
+
+        .container { max-width: 1200px; margin: 0 auto; z-index: 1; position: relative; }
+
+        /* HEADER */
+        header { text-align: center; padding: 60px 0 40px; }
+        h1 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 4rem; margin: 0; 
+            color: #fff; text-transform: uppercase; letter-spacing: -2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .logo-mark { color: var(--neon-gold); text-shadow: 0 0 25px var(--neon-gold); }
+        .subtitle { color: var(--text-muted); font-size: 1.1em; letter-spacing: 1px; text-transform: uppercase; margin-top: 10px; }
+
+        /* CONTROLS (GLASS BAR) */
+        .controls-wrapper {
+            background: rgba(30, 30, 30, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px;
+            display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        input, select {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); color: #fff;
+            padding: 15px 25px; border-radius: 50px; font-size: 16px; outline: none; font-family: 'Space Grotesk', sans-serif;
+        }
+        input:focus, select:focus { border-color: var(--neon-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); background: rgba(0,0,0,0.8); }
+        .search-box { flex-grow: 1; max-width: 400px; }
+
+        /* GRID */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+
+        /* --- CRYPTO CARD STYLE --- */
+        .tool-card {
+            background: var(--glass-bg); backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); border-top: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px; padding: 25px; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neon-gold);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .tool-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .tool-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.5em; font-weight: 700; color: #fff; }
+        
+        .tool-cat { 
+            font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;
+            color: #000; background: var(--neon-gold); padding: 5px 10px; border-radius: 4px; height: fit-content;
+            box-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        /* TIMER & WALLET TAGS */
+        .tool-tags { margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag-pill { 
+            font-size: 0.75em; border: 1px solid rgba(255,255,255,0.2); 
+            padding: 4px 10px; border-radius: 20px; color: #ddd; background: rgba(0,0,0,0.3);
+            display: flex; align-items: center; gap: 5px;
+        }
+        /* Icon effect for tags */
+        .tag-pill::before { content: '⏱'; font-size: 0.9em; }
+        .tag-pill:last-child::before { content: '💳'; }
+
+        .tool-desc { color: #ccc; font-size: 0.95em; line-height: 1.5; margin-bottom: 25px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .tool-footer { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); 
+        }
+        
+        /* Reward Text */
+        .tool-price { 
+            color: var(--neon-green); font-weight: bold; font-family: 'Space Grotesk', sans-serif; 
+            text-shadow: 0 0 8px rgba(0, 255, 157, 0.4); 
+        }
+
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-visit {
+            background: linear-gradient(135deg, var(--neon-orange), var(--neon-gold));
+            color: #000; padding: 8px 20px; border-radius: 50px; text-decoration: none; 
+            font-weight: bold; font-size: 0.9em; transition: 0.3s; border: none;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.4);
+        }
+        .btn-visit:hover { transform: scale(1.05); filter: brightness(1.2); }
+
+        .btn-info {
+            width: 35px; height: 35px; border-radius: 50%; border: 1px solid #555; background: transparent; 
+            color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-info:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+        .modal-content {
+            background: #111; border: 2px solid var(--neon-gold); border-radius: 20px;
+            padding: 40px; width: 90%; max-width: 600px; position: relative;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15); animation: popIn 0.3s ease;
+        }
+        @keyframes popIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 28px; cursor: pointer; }
+        
+        #modalTitle { color: var(--neon-gold); margin-top: 0; font-family: 'Space Grotesk'; }
+        #modalDesc { color: #ddd; line-height: 1.7; margin: 20px 0; }
+        .modal-action { background: var(--neon-gold); color: #000; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-block; }
+
+        /* ADS */
+        .ad-space { background: rgba(20,20,20,0.8); border: 1px dashed #555; color: #777; padding: 20px; margin: 30px 0; text-align: center; border-radius: 10px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <div style="margin-bottom: 10px;">
+                <span id="modalCat" style="color:#aaa; text-transform:uppercase; font-size:0.8em; letter-spacing:1px;"></span>
+                <span style="margin: 0 10px; color:#555;">|</span>
+                <span id="modalPrice" style="color:var(--neon-green); font-weight:bold;"></span>
+            </div>
+            <p id="modalDesc"></p>
+            <div style="text-align:right;">
+                <a id="modalLink" href="#" target="_blank" class="modal-action">CLAIM NOW ➔</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <header>
+            <h1>Faucet<span class="logo-mark">Hunter</span></h1>
+            <div class="subtitle">Best Crypto Faucets & Rewards 2026</div>
+        </header>
+
+        <div class="ad-space">💰 YOUR CRYPTO AD HERE 💰</div>
+
+        <div class="controls-wrapper">
+            <input type="text" id="searchInput" class="search-box" placeholder="Search (e.g. Bitcoin, Auto, Game)..." onkeyup="filterData()">
+            <select id="catSelect" onchange="filterData()">
+                <option value="all">All Faucets</option>
+                <option value="Bitcoin">Bitcoin Only</option>
+                <option value="Altcoin">Altcoins (Doge/LTC)</option>
+                <option value="Auto">Auto Faucets</option>
+                <option value="Game">Games & Mining</option>
+                <option value="PTC">PTC / Ads</option>
+            </select>
+        </div>
+
+        <div id="loader" style="text-align:center; color:var(--neon-gold);">Syncing Blockchain Data...</div>
+
+        <div id="gridContainer" class="tools-grid"></div>
+
+        <div class="ad-space">💰 BOTTOM CRYPTO AD 💰</div>
+
+        <div style="text-align:center; color:#555; font-size:0.8em; margin-top:50px; padding-bottom:30px;">
+            Disclaimer: We may earn commissions from referral links. Do your own research.
+        </div>
+    </div>
+
+<script>
+// --- ASETUKSET ---
+// TÄMÄ ON NYT PÄIVITETTY UUDELLA LINKILLÄSI:
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2FNlgCQf7CXIg6tPTKepIIfek9cQYCzsXRxTxMWPedFDJ7oUTiSOxUZdWy4-gCPOaQLEAdmMjj4t6/pub?output=csv";
+// -----------------
+
+let toolsData = [];
+let currentData = [];
+
+window.onload = function() { fetchData(); };
+
+function fetchData() {
+    Papa.parse(SHEET_URL, {
+        download: true, header: true,
+        complete: function(results) {
+            toolsData = results.data.filter(row => row.name && row.category);
+            currentData = [...toolsData];
+            document.getElementById("loader").style.display = "none";
+            renderGrid();
+        }
+    });
+}
+
+function renderGrid() {
+    const container = document.getElementById("gridContainer");
+    container.innerHTML = "";
+    if (currentData.length === 0) { container.innerHTML = `<div style="text-align:center; grid-column:1/-1; color:#777">No faucets found.</div>`; return; }
+
+    currentData.forEach((t, i) => {
+        // Tagit (Timer ja Wallet)
+        let tagsHTML = "";
+        if(t.tag1) tagsHTML += `<span class="tag-pill">${t.tag1}</span>`;
+        if(t.tag2) tagsHTML += `<span class="tag-pill">${t.tag2}</span>`;
+
+        container.innerHTML += `
+            <div class="tool-card">
+                <div>
+                    <div class="tool-header">
+                        <div class="tool-name">${t.name}</div>
+                        <div class="tool-cat">${t.category.split(' ')[0]}</div>
+                    </div>
+                    <div class="tool-tags">${tagsHTML}</div>
+                    <div class="tool-desc">${t.desc || ''}</div>
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-price">${t.price}</div>
+                    <div class="btn-group">
+                        <button class="btn-info" onclick="openModal(${i})">i</button>
+                        <a href="${t.url}" target="_blank" class="btn-visit">CLAIM</a>
+                    </div>
+                </div>
+            </div>`;
+    });
+}
+
+// MODAL
+function openModal(index) {
+    const t = currentData[index];
+    document.getElementById("modalTitle").innerText = t.name;
+    document.getElementById("modalCat").innerText = t.category;
+    document.getElementById("modalPrice").innerText = "Reward: " + t.price;
+    document.getElementById("modalDesc").innerText = t.desc;
+    document.getElementById("modalLink").href = t.url;
+    document.getElementById("infoModal").style.display = "flex";
+}
+function closeModal() { document.getElementById("infoModal").style.display = "none"; }
+window.onclick = function(e) { if(e.target == document.getElementById("infoModal")) closeModal(); }
+
+function filterData() {
+    const q = document.getElementById("searchInput").value.toLowerCase();
+    const cat = document.getElementById("catSelect").value;
+    currentData = toolsData.filter(t => {
+        const matchesSearch = (t.name && t.name.toLowerCase().includes(q)) || (t.desc && t.desc.toLowerCase().includes(q));
+        let matchesCat = cat === "all" ? true : t.category && t.category.toLowerCase().includes(cat.toLowerCase());
+        return matchesSearch && matchesCat;
+    });
+    renderGrid();
+}
+</script>
+
+</body>
+</html>
